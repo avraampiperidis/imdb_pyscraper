@@ -38,7 +38,7 @@ Note for(init_create_db_schema_with_indexes_references.py) a lot amount of data 
 database will become slow for updates/new inserts ,and will geting slower as the program runs,<br>
 and the data are geting even more.<br>
 <br>
-the mysql workbench schema -> https://github.com/avraampiperidis/imdb_pyscraper/workbench_schema.mwb
+the mysql workbench schema -> https://github.com/avraampiperidis/imdb_pyscraper/blob/master/workbench_schema.mwb
 
 Run
 -----
