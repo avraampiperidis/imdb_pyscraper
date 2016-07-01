@@ -1,5 +1,8 @@
 __author__ = 'abraham'
-
+from conf import db_host
+from conf import db_name
+from conf import db_passwd
+from conf import db_username
 #---------------
 #the extended mysql_database create schema
 #this create script builds the database
@@ -12,9 +15,9 @@ import MySQLdb
 
 
 def getCursor():
-   db = MySQLdb.connect(host="127.0.0.1",
-                     user="root",
-                     passwd="1zeronerone",
+   db = MySQLdb.connect(host=db_host,
+                     user=db_username,
+                     passwd=db_passwd,
                      )
    return db
 
