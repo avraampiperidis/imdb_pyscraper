@@ -44,8 +44,6 @@ Run
 -----
 just run imdbmain.py
 
-
-<br>
 <br>
 Configuration
 -----
