@@ -99,14 +99,13 @@ for i in idarr:
                                             content_rating = ['R']
 
                                         if "TV Series" in year[0]:
-                                           seriesscrap(i,globalmovieid,title,datelist,' '.join(genre),content_rating[0],ratings,rating_value[0],''.join(plot).strip(),link,poster[0].strip())
-                                           if review_link:
-                                               scrap_user_reviews(globalmovieid,review_link[0].strip())
+                                           seriesscrap(i,globalmovieid,title,datelist,' '.join(genre),content_rating[0],ratings,rating_value[0],''.join(plot).strip(),link,poster[0].strip()
                                         else:
                                            moviedb(i,globalmovieid,title,datelist,' '.join(genre),content_rating[0],ratings,rating_value[0],''.join(plot).strip(),link,poster[0].strip())
-                                           if review_link:
-                                               scrap_user_reviews(globalmovieid,review_link[0].strip())
 
+                                        if review_link:
+                                               scrap_user_reviews(globalmovieid,review_link[0].strip())
+                                               
                                         for actor in xrange(len(casts)):
                                             if len(casts) == len(castusername):
                                                scrapActor(i,globalmovieid,casts[actor],castslink[actor],castusername[actor])
