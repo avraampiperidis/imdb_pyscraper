@@ -252,6 +252,16 @@ CREATE TABLE `comingsoon` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 """
 
+sql_create_table_reviews = """
+CREATE TABLE `reviews` (
+  `movieid` int(11) DEFAULT NULL,
+  `title` text,
+  `review` text
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+SELECT * FROM moviecloud.reviews;
+"""
+
+
 print('creating table movie...')
 cursor.execute(sql_create_table_movie)
 
@@ -284,6 +294,9 @@ cursor.execute(sql_create_table_episodes)
 
 print('creating table comingsoon...')
 cursor.execute(sql_create_table_comingsoon)
+
+print('creating table reviews...')
+cursor.execute(sql_create_table_reviews)
 
 
 print('Done..All tables created')

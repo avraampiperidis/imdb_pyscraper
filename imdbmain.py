@@ -17,6 +17,7 @@ from db import getCursor
 from utils import remove_all_special_chars
 from utils import getMaxMovieid
 from conf import imdb_min_ratings_count
+from userreviews import scrap_user_reviews
 
 
 
@@ -58,6 +59,8 @@ for i in idarr:
         poster = tree.xpath('//div[@class="poster"]//img/@src')
         moviephotosurl = tree.xpath('//div[@class="combined-see-more see-more"]/a[1]/@href')
         release_date = tree.xpath('//div[@class="titleBar"]//div[@class="subtext"]/a[last()]/text()')
+        review_link = tree.xpath('//div[@class="titleReviewBarItem titleReviewbarItemBorder"]//span[@class="subText"]/a/@href')
+
         date = release_date[0]
         datelist = date.split()
 
@@ -97,8 +100,12 @@ for i in idarr:
 
                                         if "TV Series" in year[0]:
                                            seriesscrap(i,globalmovieid,title,datelist,' '.join(genre),content_rating[0],ratings,rating_value[0],''.join(plot).strip(),link,poster[0].strip())
+                                           if review_link:
+                                               scrap_user_reviews(globalmovieid,review_link[0].strip())
                                         else:
                                            moviedb(i,globalmovieid,title,datelist,' '.join(genre),content_rating[0],ratings,rating_value[0],''.join(plot).strip(),link,poster[0].strip())
+                                           if review_link:
+                                               scrap_user_reviews(globalmovieid,review_link[0].strip())
 
                                         for actor in xrange(len(casts)):
                                             if len(casts) == len(castusername):
