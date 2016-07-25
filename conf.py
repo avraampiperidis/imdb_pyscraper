@@ -18,14 +18,14 @@ imdb_min_ratings_count = 1000
 
 
 #the movie id to start
-#!this must be bigger from imdb_id_stop_in
+#!this must be smaller from imdb_id_stop_in
 #DEFAULT VALUE imdb_id_start_from = 0, min value = 0
 #EG: imdb_id_start_from = 1000
 #will start from http://www.imdb.com/title/tt0001000/
 imdb_id_start_from = 0
 
 #the movie id to stop
-#!This must be smaller from imdb_id_start_from
+#!This must be bigger from imdb_id_start_from
 #DEFAULT VALUE imdb_id_stop_in = 9999999 , max value = 9999999
 #will stop in http://www.imdb.com/title/tt9999999/
 imdb_id_stop_in = 9999999
