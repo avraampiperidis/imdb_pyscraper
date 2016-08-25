@@ -53,9 +53,9 @@ def initidarr():
         idarr.append('00000'+`i`)
     if i >= 100 and i <= 999:
         idarr.append('0000'+`i`)
-    if i >= 4900 and i <= 9999:
+    if i >= 1000 and i <= 9999:
         idarr.append('000'+`i`)
-    if i >= 68475 and i <= 99999:
+    if i >= 10000 and i <= 99999:
         idarr.append('00'+`i`)
     if i >= 100000 and i <= 999999:
         idarr.append('0'+`i`)
