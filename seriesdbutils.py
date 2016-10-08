@@ -19,53 +19,43 @@ headers = {
 
 
 def insert_episode(movieid,imdb,season,title,image,plot,episode):
-
     title = remove_all_special_chars(title)
     plot = remove_all_special_chars(plot)
-
     db = getCursor()
     cur = db.cursor()
-
     sql = "insert into Episodes(movieid,title,plot,poster,season,episode,imdb) values(%s,%s,%s,%s,%s,%s,%s)"
-
     try:
         cur.execute(sql,[movieid,title,plot,image,season,episode,imdb])
         db.commit()
     except MySQLdb.Error, e:
         print e
 
+    db.close()
+
 
 
 
 def insert_series(movieid,imdbid,poster):
-
     db = getCursor()
     cur = db.cursor()
-
     sql = "insert into Series(movieid,imdbid,poster) values(%s,%s,%s)"
-
     try:
         cur.execute(sql,[movieid,imdbid,poster])
         db.commit()
     except MySQLdb.Error ,e:
         print e
+    db.close()
 
 
 def insert_season(globalmovieid,imdb,seasonlink,season):
-    print ''
-
     db = getCursor()
     cur = db.cursor()
-
     sql = "insert into Season(movieid,season,link) values(%s,%s,%s)"
-
     try:
         cur.execute(sql,[globalmovieid,season,seasonlink])
         db.commit()
     except MySQLdb.Error ,e:
         print e
-
-
     page = requests.get(seasonlink, headers=headers);
     tree = html.fromstring(page.content);
     tree.make_links_absolute(seasonlink)
@@ -75,7 +65,6 @@ def insert_season(globalmovieid,imdb,seasonlink,season):
     plot = tree.xpath('//div[@class="list detail eplist"]//div[@class="info"]//div[@class="item_description"]/text()')
 
     print len(images),len(titles),len(plot)
-
     for i in xrange(len(titles)):
         insert_episode(globalmovieid,imdb,season,titles[i].strip(),images[i].strip(),plot[i].strip(),i+1)
 
@@ -84,23 +73,19 @@ def insert_series_into_movie(imdb,globalmovieid,title,genre,content_rating,ratin
 
     db = getCursor()
     cur = db.cursor()
-
     if not rating_value:
         rating_value = 5
-
     if not content_rating:
         content_rating = "R"
-
     title = remove_all_special_chars(title)
     plot = remove_all_special_chars(plot)
-
     sql = "insert into Movie(movieid,imdbid,title,plot,altplot,genre,ratings,ratingvalue,contentrating,poster) " \
                   "values('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s') " % \
                   (globalmovieid,imdb,title.strip(),plot.strip()," ",genre,int(ratings),float(rating_value),content_rating,poster)
-
     try:
         cur.execute(sql)
         db.commit()
     except MySQLdb.Error, e:
         db.rollback()
         print e
+    db.close()

@@ -7,7 +7,6 @@ sys.setdefaultencoding('utf-8')
 import MySQLdb
 from seriesdbutils import *
 from db import getCursor
-import time
 import requests
 
 headers = {
@@ -25,29 +24,26 @@ def scrap_user_reviews(movieid,review_url):
 
     print len(reviews)
     print len(review_titles)
-
     if reviews:
         if review_titles:
             if len(reviews) == len(review_titles):
                 print movieid
                 print 'insert review...'
                 print review_url
+                db = getCursor()
                 for i in xrange(len(review_titles)):
-
                    title = review_titles[i].strip()
                    review = reviews[i].strip()
-
-                   db = getCursor()
                    cur = db.cursor()
-
                    sql = "insert into reviews(movieid,title,review) values(%s,%s,%s)"
-
                    try:
                       cur.execute(sql,[movieid,title,review])
                       db.commit()
                    except MySQLdb.Error, e:
                       db.rollback()
                       print e
+                db.close()
+
 
 
 
@@ -70,9 +66,7 @@ def test_get_review_links(link):
     page = requests.get(link, headers=headers);
     tree = html.fromstring(page.content);
     tree.make_links_absolute(link)
-
     review_link = tree.xpath('//div[@class="titleReviewBarItem titleReviewbarItemBorder"]//span[@class="subText"]/a/@href')
-
     if review_link:
         print review_link[0].strip()
 

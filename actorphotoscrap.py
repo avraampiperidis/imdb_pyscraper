@@ -30,21 +30,14 @@ def actorphoto(personid,link):
     if imglinks:
         db = getCursor()
         cur = db.cursor()
-
         for i in xrange(len(imglinks)):
             img = imglinks[i]
-
             sql = "insert into Images(imageurl) values(%s)"
-
             try:
                 cur.execute(sql,[imglinks[i]])
-
                 sql = "select imageid from Images where imageurl = %s"
-
                 cur.execute(sql,[img])
-
                 result = cur.fetchall()
-
                 for row in result:
                     imageid = row[0]
                     sql = "insert into PersonImages(personid,imageid) values(%s,%s)"
@@ -53,11 +46,9 @@ def actorphoto(personid,link):
             except MySQLdb.Error, e:
                 print e
                 db.rollback()
-
             if i == photos_url_per_actor:
                 print 'max photos '+`i`
                 break
-
         db.commit()
         db.close()
 

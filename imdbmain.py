@@ -1,24 +1,21 @@
 # -*- coding: utf-8 -*-
 __author__ = 'abraham'
-
-from lxml import html
 import sys
-import MySQLdb
+import requests
 reload(sys)
 sys.setdefaultencoding('utf-8')
 print sys.stdout.encoding
-import requests
+
+from lxml import html
 from initidarray import *
 from actorscraper import scrapActor
 from moviedbutil import moviedb
 from photoscraper import photoscrap
 from seriesscraper import seriesscrap
-from db import getCursor
 from utils import remove_all_special_chars
 from utils import getMaxMovieid
 from conf import imdb_min_ratings_count
 from userreviews import scrap_user_reviews
-
 
 
 headers = {
@@ -26,7 +23,6 @@ headers = {
     "Accept-Language": "en-US,en;q=0.8"}
 
 idarr = initidarray()
-
 
 globalmovieid = getMaxMovieid()
 for i in idarr:
@@ -76,74 +72,52 @@ for i in idarr:
             year = release_date
 
         # skip all the adult content
-        if "Adult" not in genre:
-                if "Short" not in genre:
-                    if "18" not in content_rating:
-                        if "X" not in content_rating:
-                            if int(ratings) > imdb_min_ratings_count:
-                                if imgurl:
-                                  if plot:
-                                    if casts:
+        if "Adult" not in genre and \
+                "Short" not in genre and \
+                "18" not in content_rating and \
+                "X" not in content_rating and \
+                int(ratings) > imdb_min_ratings_count and \
+                imgurl and \
+                plot and \
+                casts:
 
-                                        print genre
-                                        print content_rating
-                                        print ratings
-                                        print rating_value
-                                        print title, '(', year, ')'
-                                        print imgurl
+                    print genre
+                    print content_rating
+                    print ratings
+                    print rating_value
+                    print title, '(', year, ')'
+                    print imgurl
 
-                                        title = ' '.join(title).strip()
-                                        title = remove_all_special_chars(title)
+                    title = ' '.join(title).strip()
+                    title = remove_all_special_chars(title)
 
-                                        if not content_rating:
-                                            content_rating = ['R']
+                    if not content_rating:
+                        content_rating = ['R']
 
-                                        if "TV Series" in year[0]:
-                                           seriesscrap(i,globalmovieid,title,datelist,' '.join(genre),content_rating[0],ratings,rating_value[0],''.join(plot).strip(),link,poster[0].strip())
-                                           if review_link:
-                                               scrap_user_reviews(globalmovieid,review_link[0].strip())
-                                        else:
-                                           moviedb(i,globalmovieid,title,datelist,' '.join(genre),content_rating[0],ratings,rating_value[0],''.join(plot).strip(),link,poster[0].strip())
-                                           if review_link:
-                                               scrap_user_reviews(globalmovieid,review_link[0].strip())
+                    if "TV Series" in year[0]:
+                        seriesscrap(i,globalmovieid,title,datelist,' '.join(genre),content_rating[0],ratings,rating_value[0],''.join(plot).strip(),link,poster[0].strip())
+                        if review_link:
+                             scrap_user_reviews(globalmovieid,review_link[0].strip())
+                    else:
+                        moviedb(i,globalmovieid,title,datelist,' '.join(genre),content_rating[0],ratings,rating_value[0],''.join(plot).strip(),link,poster[0].strip())
+                        if review_link:
+                             scrap_user_reviews(globalmovieid,review_link[0].strip())
 
-                                        for actor in xrange(len(casts)):
-                                            if len(casts) == len(castusername):
-                                               scrapActor(i,globalmovieid,casts[actor],castslink[actor],castusername[actor])
-                                            else:
-                                               scrapActor(i,globalmovieid,casts[actor],castslink[actor]," ")
-
-
-                                        if poster:
-                                            if moviephotosurl:
-                                               photoscrap(i,globalmovieid,moviephotosurl[0].strip())
-                                            else:
-                                               photoscrap(i,globalmovieid,[])
-
-                                        globalmovieid += 1
+                    for actor in xrange(len(casts)):
+                        if len(casts) == len(castusername):
+                             scrapActor(i,globalmovieid,casts[actor],castslink[actor],castusername[actor])
+                        else:
+                             scrapActor(i,globalmovieid,casts[actor],castslink[actor]," ")
 
 
-    #
+                    if poster:
+                        if moviephotosurl:
+                             photoscrap(i,globalmovieid,moviephotosurl[0].strip())
+                        else:
+                             photoscrap(i,globalmovieid,[])
+
+                    globalmovieid += 1
+
     except BaseException, e:
-      #insert into error table the exception
-      #db = getCursor()
-      #cur = db.cursor()
-
-      print e
-      #fix this. insert specific errors
-
-      #sql = "insert into Errors(movieid,info,level) values('%s','%s','%s')" % \
-      #      (globalmovieid,i,"movie")
-
-      #try:
-      #  cur.execute(sql)
-      #  db.commit()
-
-      #except MySQLdb.Error, e:
-      #    print "error",e
-      #    db.rollback()
-
-      #db.close()
-
-
+        print e
 

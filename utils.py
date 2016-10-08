@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
+__author__ = 'abraham'
 from datetime import datetime
 import sys
 from db import *
 reload(sys)
 sys.setdefaultencoding('utf-8')
-__author__ = 'abraham'
 import time
 
 def month_to_int(month):
@@ -77,5 +77,3 @@ def getMaxMovieid():
             return 0
         else:
             return row[0]
-
-
